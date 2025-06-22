@@ -1,0 +1,14 @@
+{% extends "crm/base.html" %}
+
+{% block content %}
+    <h1>Potwierdzenie usunięcia</h1>
+    <hr>
+    <p>Czy na pewno chcesz trwale usunąć leada: <strong>{{ object.nazwa }}</strong>?</p>
+    <p>Tej operacji nie można cofnąć.</p>
+
+    <form method="post">
+        {% csrf_token %}
+        <button type="submit" class="btn btn-danger">Tak, usuń</button>
+        <a href="{% url 'crm:lead-detail' object.pk %}" class="btn btn-secondary">Anuluj</a>
+    </form>
+{% endblock %}

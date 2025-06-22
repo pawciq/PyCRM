@@ -1,0 +1,14 @@
+{% extends "crm/base.html" %}
+
+{% block content %}
+    <h1>Utwórz nowego Leada</h1>
+    <hr>
+    <form method="post">
+        {% csrf_token %}
+
+        {{ form.as_p }}
+
+        <button type="submit" class="btn btn-success">Zapisz Leada</button>
+        <a href="{% url 'crm:lead-list' %}" class="btn btn-secondary">Anuluj</a>
+    </form>
+{% endblock %}

@@ -1,0 +1,40 @@
+{% extends "crm/base.html" %}
+
+{% block content %}
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <h1>Leady</h1>
+        <a href="{% url 'crm:lead-create' %}" class="btn btn-primary">Utwórz Leada</a>
+    </div>
+
+    <table class="table table-dark table-hover">
+        <thead>
+            <tr>
+                <th scope="col">ID</th>
+                <th scope="col">Menedżer</th>
+                <th scope="col">Biuro</th>
+                <th scope="col">Komentarz</th>
+                <th scope="col">Status</th>
+                <th scope="col">Źródło</th>
+                <th scope="col">Nazwa</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for lead in leady %}
+            <tr>
+                <th scope="row">{{ lead.pk }}</th>
+                <td>{{ lead.menedzer.username|default:"--" }}</td>
+                <td>{{ lead.biuro|default:"--" }}</td>
+                <td>{{ lead.komentarz|truncatewords:10|default:"Brak" }}</td>
+                <td><span class="badge bg-primary">{{ lead.get_status_display }}</span></td>
+                <td>{{ lead.get_zrodlo_display }}</td>
+                <td><a href="{% url 'crm:lead-detail' lead.pk %}">{{ lead.nazwa }}</a></td>
+            </tr>
+            {% empty %}
+            <tr>
+                <td colspan="7" class="text-center">Brak leadów w systemie.</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+{% endblock %}

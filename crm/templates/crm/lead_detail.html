@@ -1,0 +1,51 @@
+{% extends "crm/base.html" %}
+
+{% block content %}
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <h1>Szczegóły Leada: {{ lead.nazwa }}</h1>
+        <div>
+            <a href="{% url 'crm:lead-update' lead.pk %}" class="btn btn-primary">Edytuj</a>
+            <a href="{% url 'crm:lead-delete' lead.pk %}" class="btn btn-danger">Usuń</a>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-header">
+                    Dane Główne
+                </div>
+                <ul class="list-group list-group-flush">
+                    <li class="list-group-item"><strong>Nazwa:</strong> {{ lead.nazwa }}</li>
+                    <li class="list-group-item"><strong>Status:</strong> <span class="badge bg-primary">{{ lead.get_status_display }}</span></li>
+                    <li class="list-group-item"><strong>Źródło:</strong> {{ lead.get_zrodlo_display }}</li>
+                    <li class="list-group-item"><strong>Menedżer:</strong> {{ lead.menedzer.username|default:"Brak" }}</li>
+                    <li class="list-group-item"><strong>Biuro:</strong> {{ lead.biuro|default:"Brak" }}</li>
+                    <li class="list-group-item"><strong>Komentarz:</strong><br>{{ lead.komentarz|linebreaksbr|default:"Brak komentarza" }}</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-header">
+                    Powiązane zadania
+                </div>
+                <ul class="list-group list-group-flush">
+                    {% for zadanie in zadania %}
+                        <li class="list-group-item">
+                            <i class="bi bi-list-task"></i> {{ zadanie.tytul }}
+                            <br>
+                            <small class="text-muted">Termin: {{ zadanie.termin|date:"d.m.Y H:i" }}</small>
+                        </li>
+                    {% empty %}
+                        <li class="list-group-item">Brak powiązanych zadań.</li>
+                    {% endfor %}
+                </ul>
+                <div class="card-footer">
+                    <a href="#" class="btn btn-success btn-sm">Dodaj nowe zadanie</a>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
