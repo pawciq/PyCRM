@@ -1,0 +1,15 @@
+# Pliki systemowe
+.DS_Store
+
+# Baza danych
+db.sqlite3
+
+# Folder wirtualnego środowiska
+venv/
+
+# Folder ustawień PyCharm
+.idea/
+
+# Pliki cache Pythona
+__pycache__/
+*.pyc
