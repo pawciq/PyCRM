@@ -1,8 +1,18 @@
 {% extends "crm/base.html" %}
 
 {% block content %}
-    <h1 class="mb-4">Do zrobienia</h1>
+    <h1 class="mb-4">Dashboard</h1>
 
+    <div class="card mb-4">
+        <div class="card-header">
+            Szybkie wyszukiwanie leadów
+        </div>
+        <div class="card-body">
+            {% include 'crm/partials/lead_filter_form.html' %}
+        </div>
+    </div>
+
+    <h2 class="mb-4">Do zrobienia</h2>
     <div class="row">
         <div class="col-md-3">
             <h4>ZALEGŁE <span class="badge bg-danger">{{ zalegle_zadania.count }}</span></h4>
@@ -16,7 +26,7 @@
                             {% if zadanie.content_type.model == 'lead' %}
                                 <a href="{% url 'crm:lead-detail' zadanie.object_id %}" class="btn btn-secondary btn-sm">Lead #{{ zadanie.object_id }}</a>
                             {% endif %}
-                            {% endif %}
+                        {% endif %}
                     </div>
                 </div>
             {% empty %}

@@ -13,7 +13,7 @@ from django.views.generic import (
 )
 from django.utils import timezone
 from datetime import timedelta
-from django.db.models import Q  # NOWY, WAŻNY IMPORT
+from django.db.models import Q
 
 from .models import Lead, Klient, Zadanie, LeadStatus, Zamowienie, Samochod
 from .forms import LeadForm, ZadanieForm, ZamowienieForm, SamochodForm
@@ -27,55 +27,48 @@ class DashboardView(LoginRequiredMixin, TemplateView):
         context = super().get_context_data(**kwargs)
         user = self.request.user
         today = timezone.now()
+
         tasks = Zadanie.objects.filter(przypisane_do=user, wykonane=False)
+
         context['zalegle_zadania'] = tasks.filter(termin__lt=today.date()).order_by('termin')
         context['dzisiejsze_zadania'] = tasks.filter(termin__date=today.date()).order_by('termin')
         context['jutrzejsze_zadania'] = tasks.filter(termin__date=today.date() + timedelta(days=1)).order_by('termin')
         context['pozniejsze_zadania'] = tasks.filter(termin__date__gt=today.date() + timedelta(days=1)).order_by(
             'termin')
+
+        context['status_choices'] = LeadStatus.choices
+        context['search_query'] = self.request.GET.get('q', '')
+        context['selected_status'] = self.request.GET.get('status', '')
+
         return context
 
 
 # --- Widoki dla modelu Lead ---
-
-# MODYFIKUJEMY TEN WIDOK:
 class LeadListView(LoginRequiredMixin, ListView):
-    # Nie używamy już `model = Lead`, bo queryset budujemy sami
     template_name = 'crm/lead_list.html'
     context_object_name = 'leady'
-    # Domyślnie na stronie pokazujemy 15 leadów, aby nie ładować wszystkich naraz
     paginate_by = 15
 
     def get_queryset(self):
-        # Zaczynamy od wszystkich leadów
         queryset = Lead.objects.all().order_by('-utworzono')
 
-        # Pobieramy parametry z adresu URL (np. ?q=szukana_fraza)
-        search_query = self.request.GET.get('q', None)
-        status_query = self.request.GET.get('status', None)
+        search_query = self.request.GET.get('q')
+        status_query = self.request.GET.get('status')
 
-        # Jeśli użytkownik coś wpisał w pole wyszukiwania
         if search_query:
-            # Filtrujemy queryset, szukając frazy w nazwie LUB w komentarzu
-            # Q object jest potrzebny do budowania zapytań z warunkiem OR
-            # `icontains` oznacza "zawiera, ignorując wielkość liter"
             queryset = queryset.filter(
                 Q(nazwa__icontains=search_query) |
                 Q(komentarz__icontains=search_query)
             )
 
-        # Jeśli użytkownik wybrał jakiś status z listy
         if status_query and status_query != '':
             queryset = queryset.filter(status=status_query)
 
         return queryset
 
     def get_context_data(self, **kwargs):
-        # Ta metoda służy do przekazywania dodatkowych danych do szablonu
         context = super().get_context_data(**kwargs)
-        # Przekazujemy listę statusów, aby zbudować z nich listę rozwijaną w HTML
         context['status_choices'] = LeadStatus.choices
-        # Przekazujemy też aktualnie wybrane wartości, aby formularz je "pamiętał"
         context['search_query'] = self.request.GET.get('q', '')
         context['selected_status'] = self.request.GET.get('status', '')
         return context
@@ -119,7 +112,6 @@ class LeadDeleteView(LoginRequiredMixin, DeleteView):
     success_url = reverse_lazy('crm:lead-list')
 
 
-# ... reszta widoków bez zmian ...
 # --- Widok dla modelu Zadanie ---
 class ZadanieCreateView(LoginRequiredMixin, CreateView):
     model = Zadanie
