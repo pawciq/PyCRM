@@ -36,19 +36,19 @@
         <hr>
         <ul class="nav nav-pills flex-column mb-auto">
             <li class="nav-item">
-                <a href="#" class="nav-link text-white">
+                <a href="{% url 'crm:dashboard' %}" class="nav-link text-white">
                     <i class="bi bi-list-task me-2"></i>
                     Do zrobienia
                 </a>
             </li>
             <li>
-                <a href="{% url 'crm:lead-list' %}" class="nav-link active">
+                <a href="{% url 'crm:lead-list' %}" class="nav-link text-white">
                     <i class="bi bi-person-lines-fill me-2"></i>
                     Leady
                 </a>
             </li>
             <li>
-                <a href="#" class="nav-link text-white">
+                <a href="{% url 'crm:klient-list' %}" class="nav-link text-white">
                     <i class="bi bi-people-fill me-2"></i>
                     Klienci
                 </a>

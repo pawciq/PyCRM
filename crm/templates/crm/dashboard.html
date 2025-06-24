@@ -1,0 +1,87 @@
+{% extends "crm/base.html" %}
+
+{% block content %}
+    <h1 class="mb-4">Do zrobienia</h1>
+
+    <div class="row">
+        <div class="col-md-3">
+            <h4>ZALEGŁE <span class="badge bg-danger">{{ zalegle_zadania.count }}</span></h4>
+            <hr>
+            {% for zadanie in zalegle_zadania %}
+                <div class="card text-white bg-dark border-danger mb-3">
+                    <div class="card-body">
+                        <p>{{ zadanie.tytul }}</p>
+                        <p class="card-text"><small class="text-danger">{{ zadanie.termin|date:"d.m.Y H:i" }}</small></p>
+                        {% if zadanie.content_object %}
+                            {% if zadanie.content_type.model == 'lead' %}
+                                <a href="{% url 'crm:lead-detail' zadanie.object_id %}" class="btn btn-secondary btn-sm">Lead #{{ zadanie.object_id }}</a>
+                            {% endif %}
+                            {% endif %}
+                    </div>
+                </div>
+            {% empty %}
+                <p class="text-muted">Brak zaległych zadań.</p>
+            {% endfor %}
+        </div>
+
+        <div class="col-md-3">
+            <h4>DZIŚ <span class="badge bg-warning text-dark">{{ dzisiejsze_zadania.count }}</span></h4>
+            <hr>
+            {% for zadanie in dzisiejsze_zadania %}
+                 <div class="card text-white bg-dark border-warning mb-3">
+                    <div class="card-body">
+                        <p>{{ zadanie.tytul }}</p>
+                        <p class="card-text"><small class="text-warning-emphasis">{{ zadanie.termin|date:"H:i" }}</small></p>
+                         {% if zadanie.content_object %}
+                            {% if zadanie.content_type.model == 'lead' %}
+                                <a href="{% url 'crm:lead-detail' zadanie.object_id %}" class="btn btn-secondary btn-sm">Lead #{{ zadanie.object_id }}</a>
+                            {% endif %}
+                        {% endif %}
+                    </div>
+                </div>
+            {% empty %}
+                <p class="text-muted">Brak zadań na dziś.</p>
+            {% endfor %}
+        </div>
+
+        <div class="col-md-3">
+            <h4>JUTRO <span class="badge bg-info">{{ jutrzejsze_zadania.count }}</span></h4>
+            <hr>
+             {% for zadanie in jutrzejsze_zadania %}
+                 <div class="card text-white bg-dark border-info mb-3">
+                    <div class="card-body">
+                        <p>{{ zadanie.tytul }}</p>
+                        <p class="card-text"><small class="text-info-emphasis">{{ zadanie.termin|date:"d.m.Y H:i" }}</small></p>
+                         {% if zadanie.content_object %}
+                            {% if zadanie.content_type.model == 'lead' %}
+                                <a href="{% url 'crm:lead-detail' zadanie.object_id %}" class="btn btn-secondary btn-sm">Lead #{{ zadanie.object_id }}</a>
+                            {% endif %}
+                        {% endif %}
+                    </div>
+                </div>
+            {% empty %}
+                <p class="text-muted">Brak zadań na jutro.</p>
+            {% endfor %}
+        </div>
+
+        <div class="col-md-3">
+            <h4>PÓŹNIEJSZE <span class="badge bg-secondary">{{ pozniejsze_zadania.count }}</span></h4>
+            <hr>
+             {% for zadanie in pozniejsze_zadania %}
+                 <div class="card text-white bg-dark border-secondary mb-3">
+                    <div class="card-body">
+                        <p>{{ zadanie.tytul }}</p>
+                        <p class="card-text"><small class="text-body-secondary">{{ zadanie.termin|date:"d.m.Y" }}</small></p>
+                         {% if zadanie.content_object %}
+                            {% if zadanie.content_type.model == 'lead' %}
+                                <a href="{% url 'crm:lead-detail' zadanie.object_id %}" class="btn btn-secondary btn-sm">Lead #{{ zadanie.object_id }}</a>
+                            {% endif %}
+                        {% endif %}
+                    </div>
+                </div>
+            {% empty %}
+                <p class="text-muted">Brak dalszych zadań.</p>
+            {% endfor %}
+        </div>
+    </div>
+{% endblock %}

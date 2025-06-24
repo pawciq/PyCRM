@@ -2,8 +2,14 @@
 
 {% block content %}
     <div class="d-flex justify-content-between align-items-center mb-3">
-        <h1>Szczegóły Leada: {{ lead.nazwa }}</h1>
-        <div>
+    <h1>Szczegóły Leada: {{ lead.nazwa }}</h1>
+    <div>
+        {% if lead.status != 'converted' %}
+        <form action="{% url 'crm:lead-convert' lead.pk %}" method="post" class="d-inline">
+            {% csrf_token %}
+            <button type="submit" class="btn btn-success">Konwertuj na klienta</button>
+        </form>
+        {% endif %}
             <a href="{% url 'crm:lead-update' lead.pk %}" class="btn btn-primary">Edytuj</a>
             <a href="{% url 'crm:lead-delete' lead.pk %}" class="btn btn-danger">Usuń</a>
         </div>
@@ -43,7 +49,7 @@
                     {% endfor %}
                 </ul>
                 <div class="card-footer">
-                    <a href="#" class="btn btn-success btn-sm">Dodaj nowe zadanie</a>
+                    <a href="{% url 'crm:zadanie-create' lead_pk=lead.pk %}" class="btn btn-success btn-sm">Dodaj nowe zadanie</a>
                 </div>
             </div>
         </div>

@@ -1,0 +1,25 @@
+{% extends "crm/base.html" %}
+
+{% block content %}
+    <h1>Dodaj nowe zamówienie</h1>
+    <hr>
+    <form method="post">
+        {% csrf_token %}
+
+        <div class="mb-3">
+            <label for="{{ form.status.id_for_label }}" class="form-label">{{ form.status.label }}</label>
+            {{ form.status }}
+        </div>
+        <div class="mb-3 form-check">
+            {{ form.ma_rachunek }}
+            <label for="{{ form.ma_rachunek.id_for_label }}" class="form-check-label">{{ form.ma_rachunek.label }}</label>
+        </div>
+        <div class="mb-3 form-check">
+            {{ form.ma_umowe }}
+            <label for="{{ form.ma_umowe.id_for_label }}" class="form-check-label">{{ form.ma_umowe.label }}</label>
+        </div>
+
+        <button type="submit" class="btn btn-success">Zapisz zamówienie</button>
+        <a href="{% url 'crm:klient-detail' view.kwargs.klient_pk %}" class="btn btn-secondary">Anuluj</a>
+    </form>
+{% endblock %}

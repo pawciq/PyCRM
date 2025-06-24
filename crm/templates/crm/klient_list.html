@@ -1,0 +1,41 @@
+{% extends "crm/base.html" %}
+
+{% block content %}
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <h1>Klienci</h1>
+        </div>
+
+    <table class="table table-dark table-hover">
+        <thead>
+            <tr>
+                <th scope="col">Klient</th>
+                <th scope="col">Telefon</th>
+                <th scope="col">PESEL</th>
+                <th scope="col">Menedżer</th>
+                <th scope="col">Data dołączenia</th>
+                <th scope="col">Powiązany Lead</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for klient in klienci %}
+            <tr>
+                <td>
+                    <a href="{% url 'crm:klient-detail' klient.pk %}">{{ klient.imie_nazwisko }}</a>
+                </td>
+                <td>{{ klient.telefon|default:"--" }}</td>
+                <td>{{ klient.pesel|default:"--" }}</td>
+                <td>{{ klient.menedzer.username|default:"--" }}</td>
+                <td>{{ klient.utworzono|date:"d.m.Y" }}</td>
+                <td>
+                    <a href="{% url 'crm:lead-detail' klient.lead.pk %}">Lead #{{ klient.lead.pk }}</a>
+                </td>
+            </tr>
+            {% empty %}
+            <tr>
+                <td colspan="6" class="text-center">Brak klientów w systemie.</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+{% endblock %}

@@ -1,0 +1,14 @@
+{% extends "crm/base.html" %}
+
+{% block content %}
+    <h1>Dodaj nowy samochód do zamówienia</h1>
+    <hr>
+    <form method="post">
+        {% csrf_token %}
+
+        {{ form.as_p }}
+
+        <button type="submit" class="btn btn-success">Zapisz samochód</button>
+        <a href="{% url 'crm:zamowienie-detail' view.kwargs.zamowienie_pk %}" class="btn btn-secondary">Anuluj</a>
+    </form>
+{% endblock %}

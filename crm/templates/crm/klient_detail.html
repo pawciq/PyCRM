@@ -1,0 +1,45 @@
+{% extends "crm/base.html" %}
+
+{% block content %}
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <h2 class="card-title">Klient: {{ klient.imie_nazwisko }}</h2>
+        <div>
+            <a href="{% url 'crm:zamowienie-create' klient_pk=klient.pk %}" class="btn btn-success">Dodaj zamówienie</a>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-header">
+                    Dane Klienta
+                </div>
+                <ul class="list-group list-group-flush">
+                    <li class="list-group-item"><strong>Telefon:</strong> {{ klient.telefon|default:"Brak" }}</li>
+                    <li class="list-group-item"><strong>PESEL:</strong> {{ klient.pesel|default:"Brak" }}</li>
+                    <li class="list-group-item"><strong>Menedżer:</strong> {{ klient.menedzer.username|default:"Brak" }}</li>
+                    <li class="list-group-item text-muted">Klient od: {{ klient.utworzono|date:"d F Y" }}</li>
+                    <li class="list-group-item text-muted">Powiązany lead: <a href="{% url 'crm:lead-detail' klient.lead.pk %}">Lead #{{ klient.lead.pk }}</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-header">
+                    Historia zamówień
+                </div>
+                <ul class="list-group list-group-flush">
+                    {% for zamowienie in klient.zamowienia.all %}
+                        <li class="list-group-item">
+                            <a href="{% url 'crm:zamowienie-detail' zamowienie.pk %}">Zamówienie #{{ zamowienie.pk }}</a> - <span class="badge bg-primary">{{ zamowienie.get_status_display }}</span>
+                            <br>
+                            <small class="text-muted">Data: {{ zamowienie.utworzono|date:"d.m.Y" }}</small>
+                        </li>
+                    {% empty %}
+                        <li class="list-group-item">Brak zamówień dla tego klienta.</li>
+                    {% endfor %}
+                </ul>
+            </div>
+        </div>
+    </div>
+{% endblock %}
